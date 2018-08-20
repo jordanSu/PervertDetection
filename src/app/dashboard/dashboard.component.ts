@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import * as Chartist from "chartist";
 
 @Component({
@@ -10,9 +10,16 @@ export class DashboardComponent implements OnInit {
   @ViewChild("VideoContent")
   videoContent: any;
 
-  ngOnInit() {
-    // MARK: Video Handling
+  @ViewChild("VideoContainer")
+  videoContainer: ElementRef;
 
+  isSuccessAccessVideo = true;
+
+  errorMessage: string = null;
+
+  ngOnInit() {
+
+    // MARK: Video Handling
     const videoElement = this.videoContent.nativeElement;
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices
@@ -21,13 +28,20 @@ export class DashboardComponent implements OnInit {
           audio: false
         })
         .then(stream => {
+          this.isSuccessAccessVideo = true;
           videoElement.src = window.URL.createObjectURL(stream);
           videoElement.play();
+        })
+        .catch(error => {
+          this.isSuccessAccessVideo = false;
+          this.errorMessage = error;
         });
+    } else {
+        this.isSuccessAccessVideo = false;
+        this.errorMessage = "不支援影像播放";
     }
 
     // MARK: Chart Handling
-
     const dataSales = {
       labels: [
         "9:00AM",

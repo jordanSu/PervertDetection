@@ -108,12 +108,15 @@
                     <div class="header">
                         <h4 class="title">分析中影像</h4>
                     </div>
-                    <div class="content">
+                    <div class="content" #VideoContainer>
                         <div class="footer">
                             <video playsinline autoplay #VideoContent></video>
                             <hr>
-                            <div class="stats">
+                            <div *ngIf="isSuccessAccessVideo" class="stats">
                                 <i class="ti-reload"></i> Updated 3 minutes ago
+                            </div>
+                            <div *ngIf="!isSuccessAccessVideo" class="stats" >
+                                錯誤：{{errorMessage}}
                             </div>
                         </div>
                     </div>
