@@ -105,10 +105,8 @@
           <div class="col-lg-6 col-sm-6">
             <div class="card">
                 <div class="content">
-                    <div class="row">
-                        
+                    <div class="row chartJS">
                         <chart width="100%" [type]="type" [data]="data" [options]="options"></chart>
-                        
                     </div>
                 </div>
             </div>
@@ -183,7 +181,7 @@
     </div>
 
     <style>
-      canvas {
-        padding-right: 30px;
+      .chartJS {
+        width: 95%; margin: 0 auto;
       }
     </style>
