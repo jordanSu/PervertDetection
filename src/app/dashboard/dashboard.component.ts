@@ -8,7 +8,7 @@ import * as Chartist from "chartist";
 })
 export class DashboardComponent implements OnInit {
   @ViewChild("VideoContent")
-  videoContent: any;
+  videoContent: ElementRef;
 
   @ViewChild("VideoContainer")
   videoContainer: ElementRef;
@@ -18,17 +18,19 @@ export class DashboardComponent implements OnInit {
   errorMessage: string = null;
 
   ngOnInit() {
-
     // MARK: Video Handling
-    const videoElement = this.videoContent.nativeElement;
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices
         .getUserMedia({
-          video: true,
+          video: {
+            width: { exact: 640 },
+            height: { exact: 480 }
+          },
           audio: false
         })
         .then(stream => {
           this.isSuccessAccessVideo = true;
+          const videoElement = this.videoContent.nativeElement;
           videoElement.src = window.URL.createObjectURL(stream);
           videoElement.play();
         })
@@ -37,8 +39,8 @@ export class DashboardComponent implements OnInit {
           this.errorMessage = error;
         });
     } else {
-        this.isSuccessAccessVideo = false;
-        this.errorMessage = "不支援影像播放";
+      this.isSuccessAccessVideo = false;
+      this.errorMessage = "不支援影像播放";
     }
 
     // MARK: Chart Handling
@@ -88,12 +90,12 @@ export class DashboardComponent implements OnInit {
       ]
     ];
 
-    const chartHours = new Chartist.Line(
-      "#chartHours",
-      dataSales,
-      optionsSales,
-      responsiveSales
-    );
+    // const chartHours = new Chartist.Line(
+    //   "#chartHours",
+    //   dataSales,
+    //   optionsSales,
+    //   responsiveSales
+    // );
 
     const data = {
       labels: [
