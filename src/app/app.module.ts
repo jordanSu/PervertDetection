@@ -18,6 +18,7 @@ import { IconsComponent } from "./icons/icons.component";
 import { MapsComponent } from "./maps/maps.component";
 import { NotificationsComponent } from "./notifications/notifications.component";
 import { UpgradeComponent } from "./upgrade/upgrade.component";
+import { ChartModule } from 'angular2-chartjs';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { UpgradeComponent } from "./upgrade/upgrade.component";
     NguiMapModule.forRoot({
       apiUrl:
         "https://maps.google.com/maps/api/js?key=AIzaSyCdzQ3W0yan0yr3LNcjajg5_LGW2-I1z7E"
-    })
+    }),
+    ChartModule
   ],
   providers: [],
   bootstrap: [AppComponent]

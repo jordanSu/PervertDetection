@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import * as Chartist from "chartist";
+import Chart from 'chart.js';
 
 @Component({
   selector: "dashboard-cmp",
@@ -13,11 +14,39 @@ export class DashboardComponent implements OnInit {
   @ViewChild("VideoContainer")
   videoContainer: ElementRef;
 
+  @ViewChild("test") donut: ElementRef;
+
   isSuccessAccessVideo = true;
 
   errorMessage: string = null;
 
+  type = 'horizontalBar';
+  data = {
+    labels: ["January", "February", "March", "April", "May", "June", "July"],
+    datasets: [
+      {
+        label: "My First dataset",
+        data: [65, 59, 80, 81, 56, 55, 40]
+      }
+    ]
+  };
+  options = {
+    
+    
+    layout: {
+      padding: {
+          left: 0,
+          right: 50,
+          top: 0,
+          bottom: 0
+      }
+    }
+  };
+
   ngOnInit() {
+
+    
+
     // MARK: Video Handling
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices
