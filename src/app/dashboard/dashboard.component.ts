@@ -23,24 +23,26 @@ export class DashboardComponent implements OnInit {
 
   type = 'horizontalBar';
   data = {
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
+    labels: ["臉部", "行為"],
     datasets: [
       {
-        label: "My First dataset",
-        data: [65, 59, 80, 81, 56, 55, 40]
+        label: "",
+        data: [47, 66]
       }
     ]
   };
   options = {
-    
-    
-    layout: {
-      padding: {
-          left: 0,
-          right: 50,
-          top: 0,
-          bottom: 0
-      }
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      xAxes: [
+        {
+          barThickness: 30,
+          ticks: {
+            beginAtZero: true
+          }
+        }
+      ]
     }
   };
 
