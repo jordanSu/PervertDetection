@@ -76,11 +76,32 @@
         <div class="header">
           <h4 class="title">CCTV</h4>
         </div>
+<<<<<<< HEAD
         <div class="content" #VideoContainer>
           <div class="footer">
             <video playsinline autoplay #VideoContent></video>
             <div *ngIf="!isSuccessAccessVideo" class="stats">
               錯誤：{{errorMessage}}
+=======
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">分析中影像</h4>
+                    </div>
+                    <div class="content" #VideoContainer>
+                        <div class="footer">
+                            <video playsinline="true" autoplay="true" muted="muted" #VideoContent></video>
+                            <hr>
+                            <div *ngIf="isSuccessAccessVideo" class="stats">
+                                <i class="ti-reload"></i> Updated 3 minutes ago
+                            </div>
+                            <div *ngIf="!isSuccessAccessVideo" class="stats" >
+                                錯誤：{{errorMessage}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+>>>>>>> 42abc9d1e51ffc2d5f9e777603a1eae1799e721a
             </div>
           </div>
         </div>
@@ -109,6 +130,7 @@
             </div>
           </div>
         </div>
+<<<<<<< HEAD
       </div>
     </div>
     <div class="col-md-6">
@@ -135,3 +157,6 @@
     </div>
   </div>
 </div>
+=======
+    </div>
+>>>>>>> 42abc9d1e51ffc2d5f9e777603a1eae1799e721a

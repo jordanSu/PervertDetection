@@ -63,7 +63,7 @@ export class DashboardComponent implements OnInit {
         .then(stream => {
           this.isSuccessAccessVideo = true;
           const videoElement = this.videoContent.nativeElement;
-          videoElement.src = window.URL.createObjectURL(stream);
+          videoElement.srcObject = stream;
           videoElement.play();
         })
         .catch(error => {
@@ -121,13 +121,6 @@ export class DashboardComponent implements OnInit {
         }
       ]
     ];
-
-    // const chartHours = new Chartist.Line(
-    //   "#chartHours",
-    //   dataSales,
-    //   optionsSales,
-    //   responsiveSales
-    // );
 
     const data = {
       labels: [
