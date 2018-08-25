@@ -2,6 +2,10 @@ import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import * as Chartist from "chartist";
 import { ChartComponent } from "angular2-chartjs";
 import Chart from 'chart.js';
+import '../../assets/js/tracking-min.js';
+import '../../assets/js/face-min.js';
+declare var tracking: any;
+
 @Component({
   moduleId: module.id,
   templateUrl: "dashboard.component.html",
@@ -124,11 +128,26 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  initTracking() {
+    const objects = new tracking.ObjectTracker(['face']);
+    objects.on('track', function(event) {
+      if (event.data.length === 0) {
+        // No objects were detected in this frame.
+      } else {
+        event.data.forEach(function(rect) {
+          // rect.x, rect.y, rect.height, rect.width
+          this.totalPercentage += 0.5;
+        });
+      }
+    });
+    tracking.track('#myVideo', objects);
+  }
+
   ngOnInit() {
     // 設定時鐘每秒更新
     setInterval(() => {
       this.currentTime = new Date();
-      this.totalPercentage += 1;
+      // this.totalPercentage += 1;
       this.updateDonutChart();
     }, 1000);
 
@@ -155,6 +174,7 @@ export class DashboardComponent implements OnInit {
           const videoElement = this.videoContent.nativeElement;
           videoElement.srcObject = stream;
           videoElement.play();
+          this.initTracking();
         })
         .catch(error => {
           this.isSuccessAccessVideo = false;
@@ -204,9 +224,5 @@ export class DashboardComponent implements OnInit {
       labels: ["62%", "32%", "6%"],
       series: [62, 32, 6]
     });
-  }
-
-  colorUpdate(): void {
-    // TODO: this.chart
   }
 }
