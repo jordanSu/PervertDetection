@@ -12,7 +12,8 @@
                       <div class="col-xs-10">
                           <div class="numbers">
                               <p>時間</p>
-                              2018/08/30 23:30:06
+                              {{currentTime | date:'yyyy/MM/dd HH:mm:ss'}}
+                              <!-- {2018/08/30 23:30:06} -->
                           </div>
                       </div>
                   </div>
@@ -49,8 +50,8 @@
                       </div>
                       <div class="col-xs-8">
                           <div class="numbers">
-                              <p>犯罪係數</p>
-                              60%
+                              <p>城市犯罪係數</p>
+                              35
                           </div>
                       </div>
                   </div>
@@ -58,7 +59,7 @@
           </div>
       </div>
   </div>
-  <div class="row">
+  <div class="row" style="height:500px">
       <div class="col-lg-6">
           <div class="card">
               <div class="header">
@@ -66,7 +67,10 @@
               </div>
               <div class="content">
                   <div class="row chartJS">
-                      <chart [type]="type" [data]="data" [options]="options"></chart>
+                      <chart #ct [type]="type" [data]="data" [options]="options"></chart>
+                  </div>
+                  <div class="row chartJS">
+                    <chart #ct1 [type]="donut_type" [data]="donut_data" [options]="donut_options"></chart>
                   </div>
               </div>
           </div>
@@ -103,9 +107,9 @@
 
                   <div class="footer">
                       <div class="chart-legend">
-                          <i class="fa fa-circle text-info"></i> Open
-                          <i class="fa fa-circle text-danger"></i> Bounce
-                          <i class="fa fa-circle text-warning"></i> Unsubscribe
+                          <i class="fa fa-circle text-info"></i> 跟隨
+                          <i class="fa fa-circle text-danger"></i> 注視
+                          <i class="fa fa-circle text-warning"></i> 
                       </div>
                       <hr>
                       <div class="stats">

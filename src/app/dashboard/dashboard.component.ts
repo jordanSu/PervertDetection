@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import * as Chartist from "chartist";
+import { ChartComponent } from "angular2-chartjs";
 import Chart from 'chart.js';
-
 @Component({
-  selector: "dashboard-cmp",
   moduleId: module.id,
   templateUrl: "dashboard.component.html",
   styleUrls: ['./dashboard.component.css']
@@ -15,19 +14,39 @@ export class DashboardComponent implements OnInit {
   @ViewChild("VideoContainer")
   videoContainer: ElementRef;
 
+  // 長條圖: 可疑係數
+  @ViewChild("ct") chart: ChartComponent;
+
+  // 甜甜圈圖: 總體可疑係數
+  @ViewChild("ct1") chart1: ChartComponent;
+
   @ViewChild("test") donut: ElementRef;
 
   isSuccessAccessVideo = true;
 
   errorMessage: string = null;
 
+  // 現在時間
+  currentTime: Date;
+
   type = 'horizontalBar';
+
   data = {
     labels: ["臉部", "行為"],
     datasets: [
       {
-        label: "",
-        data: [47, 66]
+        label: "可疑指數",
+        data: [47, 66],
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          /*
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+          */
+        ]
       }
     ]
   };
@@ -39,16 +58,65 @@ export class DashboardComponent implements OnInit {
         {
           barThickness: 30,
           ticks: {
-            beginAtZero: true
+            min: 0,
+            max: 100
           }
         }
       ]
+    },
+    legend: {
+      display: false
     }
   };
 
-  ngOnInit() {
+  donut_type = 'doughnut';
 
-    
+  donut_data = {
+    datasets: [{
+        data: [60, 40],
+        backgroundColor: [
+          "#5cb85c",
+          "#ddd"
+        ]
+    }],
+
+    // These labels appear in the legend and in the tooltips when hovering different arcs
+    labels: [
+        'Red',
+        'Yellow',
+    ]
+  };
+
+  donut_options = {
+    responsive: true,
+    legend: {
+      display: false
+    },
+    elements: {
+      center: {
+        text: '60%',
+        color: '#36A2EB',
+        fontStyle: 'Helvetica',
+        sidePadding: 15 // Default 20 (as a percentage)
+      }
+    }
+    // segmentShowStroke : false,
+    // animation : false
+  };
+
+  ngOnInit() {
+    // 設定時鐘每秒更新
+    setInterval(() => {
+      this.currentTime = new Date();
+    }, 1000);
+
+    // this.chart1.chart.fillText('60%');
+    /*
+    setInterval(() => {
+      this.data.datasets[0].data[1]++;
+      this.chart.chart.update();
+    },1000);
+    */
 
     // MARK: Video Handling
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -75,82 +143,6 @@ export class DashboardComponent implements OnInit {
       this.errorMessage = "不支援影像播放";
     }
 
-    // MARK: Chart Handling
-    const dataSales = {
-      labels: [
-        "9:00AM",
-        "12:00AM",
-        "3:00PM",
-        "6:00PM",
-        "9:00PM",
-        "12:00PM",
-        "3:00AM",
-        "6:00AM"
-      ],
-      series: [
-        [287, 385, 490, 562, 594, 626, 698, 895, 952],
-        [67, 152, 193, 240, 387, 435, 535, 642, 744],
-        [23, 113, 67, 108, 190, 239, 307, 410, 410]
-      ]
-    };
-
-    const optionsSales = {
-      low: 0,
-      high: 1000,
-      showArea: true,
-      height: "245px",
-      axisX: {
-        showGrid: false
-      },
-      lineSmooth: Chartist.Interpolation.simple({
-        divisor: 3
-      }),
-      showLine: true,
-      showPoint: false
-    };
-
-    const responsiveSales: any[] = [
-      [
-        "screen and (max-width: 640px)",
-        {
-          axisX: {
-            labelInterpolationFnc: function(value) {
-              return value[0];
-            }
-          }
-        }
-      ]
-    ];
-
-    const data = {
-      labels: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "Mai",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec"
-      ],
-      series: [
-        [542, 543, 520, 680, 653, 753, 326, 434, 568, 610, 756, 895],
-        [230, 293, 380, 480, 503, 553, 600, 664, 698, 710, 736, 795]
-      ]
-    };
-
-    const options = {
-      seriesBarDistance: 10,
-      axisX: {
-        showGrid: false
-      },
-      height: "245px"
-    };
-
     const responsiveOptions: any[] = [
       [
         "screen and (max-width: 640px)",
@@ -164,13 +156,6 @@ export class DashboardComponent implements OnInit {
         }
       ]
     ];
-
-    const chartActivity = new Chartist.Line(
-      "#chartActivity",
-      data,
-      options,
-      responsiveOptions
-    );
 
     const dataPreferences = {
       series: [[25, 30, 20, 25]]
@@ -197,5 +182,9 @@ export class DashboardComponent implements OnInit {
       labels: ["62%", "32%", "6%"],
       series: [62, 32, 6]
     });
+  }
+
+  colorUpdate(): void {
+    // TODO: this.chart
   }
 }
