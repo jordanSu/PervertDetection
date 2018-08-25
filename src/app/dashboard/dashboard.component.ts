@@ -26,6 +26,8 @@ export class DashboardComponent implements OnInit {
 
   errorMessage: string = null;
 
+  totalPercentage = 40;
+
   // 現在時間
   currentTime: Date;
 
@@ -73,7 +75,7 @@ export class DashboardComponent implements OnInit {
 
   donut_data = {
     datasets: [{
-        data: [60, 40],
+        data: [this.totalPercentage, 100 - this.totalPercentage],
         backgroundColor: [
           "#5cb85c",
           "#ddd"
@@ -89,6 +91,7 @@ export class DashboardComponent implements OnInit {
 
   donut_options = {
     responsive: true,
+    maintainAspectRatio: true,
     legend: {
       display: false
     },
@@ -99,15 +102,34 @@ export class DashboardComponent implements OnInit {
         fontStyle: 'Helvetica',
         sidePadding: 15 // Default 20 (as a percentage)
       }
-    }
+    },
+    // donut 厚度
+    cutoutPercentage: 70,
     // segmentShowStroke : false,
     // animation : false
   };
+
+  updateDonutChart() {
+    if (this.totalPercentage < 100 && this.totalPercentage > 0) {
+      this.donut_data.datasets[0].data[0] = this.totalPercentage;
+      this.donut_data.datasets[0].data[1] = 100 - this.totalPercentage;
+      if (this.totalPercentage > 70) {
+        this.donut_data.datasets[0].backgroundColor[0] = "#b85c5c";
+      } else if (this.totalPercentage > 50) {
+        this.donut_data.datasets[0].backgroundColor[0] = "#b8b85c";
+      } else {
+        this.donut_data.datasets[0].backgroundColor[0] = "#5cb85c";
+      }
+      this.chart1.chart.update(500);
+    }
+  }
 
   ngOnInit() {
     // 設定時鐘每秒更新
     setInterval(() => {
       this.currentTime = new Date();
+      this.totalPercentage += 1;
+      this.updateDonutChart();
     }, 1000);
 
     // this.chart1.chart.fillText('60%');

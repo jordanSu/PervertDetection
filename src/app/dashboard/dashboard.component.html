@@ -59,21 +59,29 @@
           </div>
       </div>
   </div>
-  <div class="row" style="height:500px">
+  <div class="row">
       <div class="col-lg-6">
           <div class="card">
               <div class="header">
                   <h4 class="title">可疑係數</h4>
               </div>
               <div class="content">
-                  <div class="row chartJS">
+                  <div class="row barChart">
                       <chart #ct [type]="type" [data]="data" [options]="options"></chart>
                   </div>
-                  <div class="row chartJS">
+              </div>
+              <div class="header">
+                <h4 class="title">整體可疑係數</h4>
+              </div>
+              <div class="content">
+                <div class="row donutChart">
                     <chart #ct1 [type]="donut_type" [data]="donut_data" [options]="donut_options"></chart>
-                  </div>
+                </div>
               </div>
           </div>
+          <div class="card">
+                
+          </div> 
       </div>
       <div class="col-md-6">
           <div class="card">
