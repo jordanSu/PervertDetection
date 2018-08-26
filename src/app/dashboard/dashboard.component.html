@@ -63,9 +63,9 @@
   </div>
   <div class="row">
       <div class="col-lg-6">
-          <div class="card">
+          <div class="card big-card">
               <div class="header">
-                  <h4 class="title">可疑係數</h4>
+                  <h4 class="title">畫面特徵係數</h4>
               </div>
               <div class="content">
                   <div class="row barChart">
@@ -77,7 +77,8 @@
               </div>
               <div class="content">
                 <div class="row donutChart">
-                    <chart #ct1 [type]="donut_type" [data]="donut_data" [options]="donut_options"></chart>
+                    <chart style="position: absolute; width:95%; height: 95%;" #ct1 [type]="donut_type" [data]="donut_data" [options]="donut_options"></chart>
+                    <div id="total-percent-text">{{this.totalPercentage | number:'1.0-0'}}%</div>
                 </div>
               </div>
           </div>
@@ -86,14 +87,16 @@
           </div> 
       </div>
       <div class="col-md-6">
-          <div class="card">
+          <div class="card big-card">
               <div class="header">
                   <h4 class="title">CCTV</h4>
               </div>
               <div class="content" #VideoContainer>
-                  <div class="footer">
+                  <div class="video_container">
                       <video id='myVideo' playsinline="true" autoplay="true" muted="muted" #VideoContent></video>
-                      <hr>
+                      <canvas #mycanvas id="canvas" width="640" height="480"></canvas>
+                  </div>
+                  <div class="footer">
                       <div *ngIf="isSuccessAccessVideo" class="stats">
                           <i class="ti-reload"></i> Updated 3 minutes ago
                       </div>
