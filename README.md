@@ -10,7 +10,7 @@ ng serve -o
 ```
 
 ## 需同時啟用 Signal Server
-[PervertDetection](https://github.com/shawnhung0714/PervertDetectionServer)
+[PervertDetectionServer](https://github.com/shawnhung0714/PervertDetectionServer)
 
 ```bash
 git clone git@github.com:shawnhung0714/PervertDetectionServer.git
