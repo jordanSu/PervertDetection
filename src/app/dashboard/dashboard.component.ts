@@ -276,14 +276,25 @@ export class DashboardComponent implements OnInit {
     });
 
     // once remote track media arrives, show it in remote video element
-    this.peerConnection.ontrack = (event: RTCTrackEvent) => {
+    // API is Too New
+    // this.peerConnection.ontrack = (event: RTCTrackEvent) => {
+    //   this.isSuccessAccessVideo = true;
+    //   this.errorMessage = "Playing Video";
+    //   // don't set srcObject again if it is already set.
+    //   if (this.videoContent.nativeElement.srcObject) {
+    //     return;
+    //   }
+    //   this.videoContent.nativeElement.srcObject = event.streams[0];
+    // };
+
+    this.peerConnection.onaddstream = (event) => {
       this.isSuccessAccessVideo = true;
       this.errorMessage = "Playing Video";
       // don't set srcObject again if it is already set.
       if (this.videoContent.nativeElement.srcObject) {
         return;
       }
-      this.videoContent.nativeElement.srcObject = event.streams[0];
+      this.videoContent.nativeElement.srcObject = event.stream;
     };
   }
 

@@ -102,10 +102,10 @@ export class MonitoringComponent implements OnInit {
         audio: false
       })
       .then(stream => {
-        stream
-          .getTracks()
-          .forEach(track => this.peerConnection.addTrack(track, stream));
-
+        // stream
+        //   .getTracks()
+        //   .forEach(track => this.peerConnection.addTrack(track, stream));
+        this.peerConnection.addStream(stream);
         this.isSuccessAccessVideo = true;
         this.errorMessage = "Sending Videos...";
 

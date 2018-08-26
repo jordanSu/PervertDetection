@@ -15,6 +15,11 @@
       "es2017",
       "dom"
     ],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "module": "es2015",
+    "baseUrl": "./"
+  },
+  "angularCompilerOptions": {
+    "preserveWhitespaces": false
   }
 }
