@@ -1,9 +1,12 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener } from "@angular/core";
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from "@angular/core";
 import * as Chartist from "chartist";
+
 import { ChartComponent } from "angular2-chartjs";
-// import Chart from 'chart.js';
+import * as io from "socket.io-client";
 import '../../assets/js/tracking-min.js';
 import '../../assets/js/face-min.js';
+// import Chart from 'chart.js';
+
 
 declare var tracking: any;
 declare var Chart: any;
@@ -14,7 +17,7 @@ const BAR_MAX = 95;
 @Component({
   moduleId: module.id,
   templateUrl: "dashboard.component.html",
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ["./dashboard.component.css"]
 })
 export class DashboardComponent implements OnInit {
   @ViewChild("VideoContent")
@@ -24,14 +27,17 @@ export class DashboardComponent implements OnInit {
   videoContainer: ElementRef;
 
   // 長條圖: 可疑係數
-  @ViewChild("ct") chart: ChartComponent;
+  @ViewChild("ct")
+  chart: ChartComponent;
 
   // 甜甜圈圖: 總體可疑係數
-  @ViewChild("ct1") chart1: ChartComponent;
+  @ViewChild("ct1")
+  chart1: ChartComponent;
 
   @ViewChild("mycanvas") canvas: ElementRef;
 
-  @ViewChild("test") donut: ElementRef;
+  socket: SocketIOClient.Socket;
+  peerConnection: RTCPeerConnection;
 
   context: CanvasRenderingContext2D;
 
@@ -47,7 +53,7 @@ export class DashboardComponent implements OnInit {
   // 現在時間
   currentTime: Date;
 
-  type = 'horizontalBar';
+  type = "horizontalBar";
 
   data = {
     labels: ["臉部", "行為"],
@@ -56,8 +62,8 @@ export class DashboardComponent implements OnInit {
         label: "特徵係數",
         data: [this.facePercentage, this.behaviorPercentage],
         backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(54, 162, 235, 0.2)"
           /*
           'rgba(255, 206, 86, 0.2)',
           'rgba(75, 192, 192, 0.2)',
@@ -87,7 +93,7 @@ export class DashboardComponent implements OnInit {
     }
   };
 
-  donut_type = 'doughnut';
+  donut_type = "doughnut";
 
   donut_data = {
     datasets: [{
@@ -187,30 +193,7 @@ export class DashboardComponent implements OnInit {
     // this.chart1.chart.fillText('60%');
 
     // MARK: Video Handling
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices
-        .getUserMedia({
-          video: {
-            width: { exact: 640 },
-            height: { exact: 480 }
-          },
-          audio: false
-        })
-        .then(stream => {
-          this.isSuccessAccessVideo = true;
-          const videoElement = this.videoContent.nativeElement;
-          videoElement.srcObject = stream;
-          videoElement.play();
-          this.initTracking();
-        })
-        .catch(error => {
-          this.isSuccessAccessVideo = false;
-          this.errorMessage = error;
-        });
-    } else {
-      this.isSuccessAccessVideo = false;
-      this.errorMessage = "不支援影像播放";
-    }
+    this.startWebRTC();
 
     const responsiveOptions: any[] = [
       [
@@ -296,5 +279,109 @@ export class DashboardComponent implements OnInit {
     } else if (event.key === 's') {
       this.addBehaviorPercentage(-10);
     }
+  }
+
+  startWebRTC() {
+    this.socket = io.connect(
+      "https://localhost:4201",
+      { secure: true }
+    );
+
+
+    this.socket.on("Open", message => {
+      console.log("first member, id:", message.memberID, ", waiting for other peer...");
+    });
+
+    this.socket.on("NewMember", message => {
+      console.log("detect new peer join, sending offer");
+      this.createOffer().catch(error => {
+        console.error(error);
+      });
+    });
+
+    this.peerConnection = new RTCPeerConnection({
+      iceServers: [
+        {
+          urls: "stun:stun.l.google.com:19302"
+        }
+      ]
+    });
+
+    this.peerConnection.onicecandidate = (event: RTCPeerConnectionIceEvent) => {
+      this.socket.emit("icecandidate", event.candidate);
+    };
+
+    // let the "negotiationneeded" event trigger offer generation
+    this.peerConnection.onnegotiationneeded = event => {
+      this.createOffer()
+        .catch(error => {
+          console.error(error);
+        });
+    };
+
+    this.socket.on("offer", message => {
+      const desc: RTCSessionDescription = JSON.parse(message);
+      this.peerConnection
+        .setRemoteDescription(desc)
+        .then(() => {
+          return this.peerConnection.createAnswer();
+        })
+        .then(answer => {
+          return this.peerConnection.setLocalDescription(answer);
+        })
+        .then(() => {
+          this.socket.emit(
+            "answer",
+            JSON.stringify(this.peerConnection.localDescription)
+          );
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    });
+
+    this.socket.on("answer", message => {
+      this.peerConnection
+        .setRemoteDescription(JSON.parse(message))
+        .catch(error => {
+          console.error(error);
+        });
+    });
+
+    // once remote track media arrives, show it in remote video element
+    // API is Too New
+    // this.peerConnection.ontrack = (event: RTCTrackEvent) => {
+    //   this.isSuccessAccessVideo = true;
+    //   this.errorMessage = "Playing Video";
+    //   // don't set srcObject again if it is already set.
+    //   if (this.videoContent.nativeElement.srcObject) {
+    //     return;
+    //   }
+    //   this.videoContent.nativeElement.srcObject = event.streams[0];
+    // };
+
+    this.peerConnection.onaddstream = (event) => {
+      this.isSuccessAccessVideo = true;
+      this.errorMessage = "Playing Video";
+      // don't set srcObject again if it is already set.
+      if (this.videoContent.nativeElement.srcObject) {
+        return;
+      }
+      this.videoContent.nativeElement.srcObject = event.stream;
+    };
+  }
+
+  createOffer() {
+    return this.peerConnection
+      .createOffer()
+      .then(offer => {
+        return this.peerConnection.setLocalDescription(offer);
+      })
+      .then(() => {
+        this.socket.emit(
+          "offer",
+          JSON.stringify(this.peerConnection.localDescription)
+        );
+      });
   }
 }

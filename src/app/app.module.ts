@@ -19,6 +19,7 @@ import { MapsComponent } from "./maps/maps.component";
 import { NotificationsComponent } from "./notifications/notifications.component";
 import { UpgradeComponent } from "./upgrade/upgrade.component";
 import { ChartModule } from 'angular2-chartjs';
+import { MonitoringComponent } from "./monitoring/monitoring.component";
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { ChartModule } from 'angular2-chartjs';
     IconsComponent,
     MapsComponent,
     NotificationsComponent,
-    UpgradeComponent
+    UpgradeComponent,
+    MonitoringComponent
   ],
   imports: [
     BrowserModule,
