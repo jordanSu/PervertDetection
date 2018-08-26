@@ -9,5 +9,8 @@ npm install
 ng serve -o
 ```
 
-### This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.4.
+## 需同時啟用 Signal Server
+(PervertDetection)[https://github.com/shawnhung0714/PervertDetectionServer]
+
+### This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.1.5.
 
