@@ -95,7 +95,7 @@
                       <video id='myVideo' playsinline="true" autoplay="true" muted="muted" #VideoContent></video>
                       <hr>
                       <div *ngIf="isSuccessAccessVideo" class="stats">
-                          <i class="ti-reload"></i> Updated 3 minutes ago
+                          <i class="ti-reload"></i> {{errorMessage}}
                       </div>
                       <div *ngIf="!isSuccessAccessVideo" class="stats">
                           錯誤：{{errorMessage}}

@@ -8,6 +8,7 @@ import { IconsComponent } from './icons/icons.component';
 import { MapsComponent } from './maps/maps.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { UpgradeComponent } from './upgrade/upgrade.component';
+import { MonitoringComponent } from './monitoring/monitoring.component';
 
 export const AppRoutes: Routes = [
     {
@@ -18,6 +19,10 @@ export const AppRoutes: Routes = [
     {
         path: 'dashboard',
         component: DashboardComponent
+    },
+    {
+        path: 'monitoring',
+        component: MonitoringComponent
     },
     {
         path: 'user',
