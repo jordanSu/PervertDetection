@@ -9,7 +9,7 @@ npm install
 ng serve -o
 ```
 
-## 需同時啟用 Signal Server
+## 啟用 Signal Server
 [PervertDetectionServer](https://github.com/shawnhung0714/PervertDetectionServer)
 
 ```bash
@@ -18,6 +18,9 @@ cd PervertDetectionServer
 npm install
 node index.js
 ```
+##  啟動串流
+1. 開啟擷取Video頁面, [https://localhost:4200/monitoring](https://localhost:4200/monitoring)
+2. 開啟播放Video頁面, [https://localhost:4200/dashboard](https://localhost:4200/dashboard)
 
 ### This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.1.5.
 
