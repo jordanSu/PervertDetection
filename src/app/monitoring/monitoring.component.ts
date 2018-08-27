@@ -37,7 +37,7 @@ export class MonitoringComponent implements OnInit {
     });
 
     this.socket = io.connect(
-      "https://localhost:4201",
+      "https://" + location.hostname + ":4201",
       { secure: true }
     );
 

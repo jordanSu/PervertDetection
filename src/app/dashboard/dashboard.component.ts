@@ -282,8 +282,9 @@ export class DashboardComponent implements OnInit {
   }
 
   startWebRTC() {
+    const url = "https://" + location.hostname + ":4201";
     this.socket = io.connect(
-      "https://localhost:4201",
+      url,
       { secure: true }
     );
 
