@@ -98,7 +98,7 @@ export class MonitoringComponent implements OnInit {
 
     navigator.mediaDevices
       .getUserMedia({
-        video: true,
+        video: { facingMode: 'environment' },
         audio: false
       })
       .then(stream => {
