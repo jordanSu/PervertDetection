@@ -186,10 +186,11 @@ export class DashboardComponent implements OnInit {
           this.addBehaviorPercentage(5);
           console.log('this is good');
           this.context.strokeStyle = '#a64ceb';
+          this.context.lineWidth = 12;
           this.context.strokeRect(rect.x, rect.y, rect.width, rect.height);
-          this.context.font = '11px Helvetica';
+          this.context.font = '15px Helvetica';
           this.context.fillStyle = "#fff";
-          this.context.fillText('臉部', rect.x + rect.width + 5, rect.y + 11);
+          this.context.fillText('色狼', rect.x + rect.width + 5, rect.y + 11);
           // this.context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
           // this.context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
         });
@@ -316,8 +317,9 @@ export class DashboardComponent implements OnInit {
   }
 
   startWebRTC() {
+    const url = "https://" + location.hostname + ":4201";
     this.socket = io.connect(
-      "https://localhost:4201",
+      url,
       { secure: true }
     );
 
@@ -403,6 +405,7 @@ export class DashboardComponent implements OnInit {
         return;
       }
       this.videoContent.nativeElement.srcObject = event.stream;
+      this.initTracking();
     };
   }
 

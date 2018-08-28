@@ -37,7 +37,7 @@ export class MonitoringComponent implements OnInit {
     });
 
     this.socket = io.connect(
-      "https://localhost:4201",
+      "https://" + location.hostname + ":4201",
       { secure: true }
     );
 
@@ -98,7 +98,7 @@ export class MonitoringComponent implements OnInit {
 
     navigator.mediaDevices
       .getUserMedia({
-        video: true,
+        video: { facingMode: 'environment' },
         audio: false
       })
       .then(stream => {
