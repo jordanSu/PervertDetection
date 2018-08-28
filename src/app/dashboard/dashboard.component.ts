@@ -177,7 +177,7 @@ export class DashboardComponent implements OnInit {
       if (event.data.length === 0) {
         // No objects were detected in this frame.
         this.addFacePercentage(-0.5);
-        this.addBehaviorPercentage(-0.5);
+        this.addBehaviorPercentage(-0.3);
         console.log('nothing happen');
       } else {
         event.data.forEach((rect) => {
@@ -186,11 +186,11 @@ export class DashboardComponent implements OnInit {
           this.addBehaviorPercentage(5);
           console.log('this is good');
           this.context.strokeStyle = '#a64ceb';
-          this.context.lineWidth = 12;
+          this.context.lineWidth = 10;
           this.context.strokeRect(rect.x, rect.y, rect.width, rect.height);
           this.context.font = '15px Helvetica';
           this.context.fillStyle = "#fff";
-          this.context.fillText('色狼', rect.x + rect.width + 5, rect.y + 11);
+          this.context.fillText('臉部', rect.x + rect.width + 5, rect.y + 11);
           // this.context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
           // this.context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
         });
