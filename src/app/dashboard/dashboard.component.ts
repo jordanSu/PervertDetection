@@ -1,4 +1,5 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from "@angular/core";
+import { Component, TemplateRef, ElementRef, HostListener, OnInit, ViewChild } from "@angular/core";
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import * as Chartist from "chartist";
 
 import { ChartComponent } from "angular2-chartjs";
@@ -12,7 +13,7 @@ declare var tracking: any;
 declare var Chart: any;
 
 const BAR_MIN = 10;
-const BAR_MAX = 95;
+const BAR_MAX = 100;
 
 @Component({
   moduleId: module.id,
@@ -44,6 +45,8 @@ export class DashboardComponent implements OnInit {
   isSuccessAccessVideo = true;
 
   errorMessage: string = null;
+
+  intervalID: any;
 
   // 特徵係數初始化
   facePercentage = 30;
@@ -123,6 +126,22 @@ export class DashboardComponent implements OnInit {
     // animation : false
   };
 
+  @ViewChild("template") template: TemplateRef<any>;
+  
+  public modalRef: BsModalRef; // {1}
+  public isPopup: boolean;
+  constructor(private modalService: BsModalService) {} // {2}
+
+  public openModal() {
+    this.modalRef = this.modalService.show(this.template); // {3}
+    this.isPopup = true;
+  }
+
+  public closeModal() {
+    this.modalRef.hide();
+    this.isPopup = false;
+  }
+
   updateDonutChart() {
     this.totalPercentage = this.facePercentage * 0.5 + this.behaviorPercentage * 0.5;
     if (this.totalPercentage < 100 && this.totalPercentage > 0) {
@@ -163,8 +182,8 @@ export class DashboardComponent implements OnInit {
       } else {
         event.data.forEach((rect) => {
           // rect.x, rect.y, rect.height, rect.width
-          this.addFacePercentage(1);
-          this.addBehaviorPercentage(1);
+          this.addFacePercentage(8);
+          this.addBehaviorPercentage(5);
           console.log('this is good');
           this.context.strokeStyle = '#a64ceb';
           this.context.strokeRect(rect.x, rect.y, rect.width, rect.height);
@@ -189,6 +208,9 @@ export class DashboardComponent implements OnInit {
     setInterval(() => {
       this.updateBarChart();
       this.updateDonutChart();
+      if (this.totalPercentage >= 90 && !this.isPopup) {
+        this.openModal();
+      }
     }, 500);
     // this.chart1.chart.fillText('60%');
 
@@ -256,13 +278,13 @@ export class DashboardComponent implements OnInit {
   }
 
   addFacePercentage(num: number) {
-    if (this.facePercentage + num > BAR_MIN && this.facePercentage + num < BAR_MAX) {
+    if (this.facePercentage + num >= BAR_MIN && this.facePercentage + num <= BAR_MAX) {
       this.facePercentage += num;
     }
   }
 
   addBehaviorPercentage(num: number) {
-    if (this.behaviorPercentage + num > BAR_MIN && this.behaviorPercentage + num < BAR_MAX) {
+    if (this.behaviorPercentage + num >= BAR_MIN && this.behaviorPercentage + num <= BAR_MAX) {
       this.behaviorPercentage += num;
     }
   }
@@ -278,6 +300,18 @@ export class DashboardComponent implements OnInit {
       this.addBehaviorPercentage(10);
     } else if (event.key === 's') {
       this.addBehaviorPercentage(-10);
+    } else if (event.key === 'e') {
+      var x = 0;
+      this.intervalID = setInterval(() => {
+        this.addFacePercentage(20);
+        this.addBehaviorPercentage(20);
+        if (++x === 5) {
+          window.clearInterval(this.intervalID);
+        }
+      }, 500);
+    } else if (event.key === 'r') {
+      this.facePercentage = 95;
+      this.behaviorPercentage = 95;
     }
   }
 
@@ -361,6 +395,7 @@ export class DashboardComponent implements OnInit {
     // };
 
     this.peerConnection.onaddstream = (event) => {
+      this.initTracking();
       this.isSuccessAccessVideo = true;
       this.errorMessage = "Playing Video";
       // don't set srcObject again if it is already set.

@@ -20,6 +20,8 @@ import { NotificationsComponent } from "./notifications/notifications.component"
 import { UpgradeComponent } from "./upgrade/upgrade.component";
 import { ChartModule } from 'angular2-chartjs';
 import { MonitoringComponent } from "./monitoring/monitoring.component";
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 @NgModule({
   declarations: [
@@ -45,7 +47,9 @@ import { MonitoringComponent } from "./monitoring/monitoring.component";
       apiUrl:
         "https://maps.google.com/maps/api/js?key=AIzaSyCdzQ3W0yan0yr3LNcjajg5_LGW2-I1z7E"
     }),
-    ChartModule
+    ChartModule,
+    ModalModule.forRoot(),
+    BsDropdownModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]
