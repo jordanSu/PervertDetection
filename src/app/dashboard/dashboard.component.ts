@@ -135,6 +135,10 @@ export class DashboardComponent implements OnInit {
   public openModal() {
     this.modalRef = this.modalService.show(this.template); // {3}
     this.isPopup = true;
+    let audio = new Audio();
+    audio.src = "../../assets/sounds/alert.wav";
+    audio.load();
+    audio.play();
   }
 
   public closeModal() {
