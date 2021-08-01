@@ -10,10 +10,10 @@ ng serve -o
 ```
 
 ## 啟用 Signal Server
-[PervertDetectionServer](https://github.com/shawnhung0714/PervertDetectionServer)
+Repo 連結: [PervertDetectionServer](https://github.com/jordanSu/PervertDetectionServer)
 
 ```bash
-git clone git@github.com:shawnhung0714/PervertDetectionServer.git
+git clone git@github.com:jordanSu/PervertDetectionServer.git
 cd PervertDetectionServer
 npm install
 node index.js
